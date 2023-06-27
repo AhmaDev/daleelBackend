@@ -11,6 +11,7 @@ var indexRouter = require("./routes/index");
 const connection = require("./helpers/db");
 
 var app = express();
+app.set("view engine", "html");
 
 app.use(logger("dev"));
 app.use(express.json());
