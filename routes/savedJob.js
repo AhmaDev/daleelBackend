@@ -83,7 +83,7 @@ router.put(`/${tableName}/:id`, function (req, res, next) {
 
 router.delete(`/${tableName}/:jobId/:userId`, function (req, res, next) {
   connection.query(
-    `DELETE FROM ${tableName} WHERE jobId = ${req.params.id} AND userId = ${req.params.userId}`,
+    `DELETE FROM ${tableName} WHERE jobId = ${req.params.jobId} AND userId = ${req.params.userId}`,
     (err, result) => {
       if (err) {
         console.log(err);
