@@ -14,7 +14,7 @@ router.get(`/${tableName}s`, function (req, res, next) {
 
 router.get(`/userSavedJobs/:id`, function (req, res, next) {
   connection.query(
-    `SELECT * FROM ${tableName} WHERE userId = ${req.params.id}`,
+    `SELECT * FROM ${tableName} LEFT JOIN job ON job.idJob = savedJob.jobId WHERE userId = ${req.params.id}`,
     (err, result) => {
       res.send(result);
     },
