@@ -23,7 +23,7 @@ router.get(`/${tableName}/:id`, function (req, res, next) {
 
 router.get(`/cvAdByUser/:id`, function (req, res, next) {
   connection.query(
-    `SELECT cvAd.* FROM cvAd LEFT JOIN cv ON cv.idCv = cvAd.cvId WHERE cv.userId = ${req.params.id} AND cvAd.status != 'ended'`,
+    `SELECT cvAd.* FROM cvAd LEFT JOIN cv ON cv.idCv = cvAd.cvId WHERE cv.userId = ${req.params.id} AND cvAd.status != 'ended' ORDER BY cvAd.idCvAd DESC`,
     (err, result) => {
       if (result.length > 0) {
         res.send(result[0]);
