@@ -46,17 +46,11 @@ router.get(`/popupAds`, function (req, res, next) {
   );
 });
 
-router.get(`/${tableName}/:id`, function (req, res, next) {
+router.get(`/jobAds/:id`, function (req, res, next) {
   connection.query(
-    `SELECT * FROM ${tableName} WHERE id${capitalize(tableName)} = ${
-      req.params.id
-    }`,
+    `SELECT * FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType WHERE jobAd.jobId = ${req.params.id}`,
     (err, result) => {
-      if (result.length > 0) {
-        res.send(result[0]);
-      } else {
-        res.sendStatus(404);
-      }
+      res.send(result);
     },
   );
 });
