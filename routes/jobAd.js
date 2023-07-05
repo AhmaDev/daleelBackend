@@ -56,7 +56,7 @@ router.get(`/jobAds/:id`, function (req, res, next) {
 });
 router.get(`/allJobAds`, function (req, res, next) {
   connection.query(
-    `SELECT jobAd.*, adType.* , job.jobTitle FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType LEFT JOIN job ON jobAd.jobId = job.idJob`,
+    `SELECT jobAd.*, adType.* , job.jobTitle FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType LEFT JOIN job ON jobAd.jobId = job.idJob ORDER BY idJobAd DESC`,
     (err, result) => {
       res.send(result);
     },
