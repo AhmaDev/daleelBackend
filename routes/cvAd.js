@@ -47,7 +47,7 @@ router.get(`/cvAds`, function (req, res, next) {
 });
 router.get(`/allCvAds`, function (req, res, next) {
   connection.query(
-    `SELECT cv.*, user.username, user.image FROM cvAd LEFT JOIN cv ON cvAd.cvId = cv.idCv LEFT JOIN user ON user.idUser = cv.userId`,
+    `SELECT cvAd.*, user.username, user.image FROM cvAd LEFT JOIN cv ON cvAd.cvId = cv.idCv LEFT JOIN user ON user.idUser = cv.userId`,
     (err, result) => {
       if (err) {
         console.log(err);
