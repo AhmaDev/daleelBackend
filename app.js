@@ -84,6 +84,12 @@ cron.schedule("0 0 * * *", () => {
     `UPDATE cvAd SET status = 'active' WHERE status = 'pending' AND DATE(NOW()) BETWEEN startDate AND endDate`,
   );
   connection.query(
+    `UPDATE jobAd SET status = 'active' WHERE status = 'approved' AND DATE(NOW()) BETWEEN startDate AND endDate`,
+  );
+  connection.query(
+    `UPDATE cvAd SET status = 'active' WHERE status = 'approved' AND DATE(NOW()) BETWEEN startDate AND endDate`,
+  );
+  connection.query(
     `UPDATE jobAd SET status = 'ended' WHERE status = 'active' AND DATE(NOW()) > endDate`,
   );
   connection.query(
