@@ -54,6 +54,14 @@ router.get(`/jobAds/:id`, function (req, res, next) {
     },
   );
 });
+router.get(`/allJobAds`, function (req, res, next) {
+  connection.query(
+    `SELECT * FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType LEFT JOIN job ON jobAd.jobId = job.idJob`,
+    (err, result) => {
+      res.send(result);
+    },
+  );
+});
 
 router.post(`/add${capitalize(tableName)}`, function (req, res, next) {
   connection.query(
