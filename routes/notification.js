@@ -16,6 +16,9 @@ router.get(`/${tableName}s`, function (req, res, next) {
         decoded.userId
       } ORDER BY id${capitalize(tableName)} DESC`,
       (err, result) => {
+        if (err) {
+          console.log(err);
+        }
         res.send(result);
       },
     );
