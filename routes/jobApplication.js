@@ -125,7 +125,7 @@ router.put(`/${tableName}/:id`, function (req, res, next) {
                 notificationTitle: notifRes[0].jobTitle,
                 notificationBody: "تم قبولك في الوظيفة",
                 notificationType: "applicationApproved",
-                data: "['jobId': notifRes[0].idJob]",
+                data: `["jobId": ${notifRes[0].idJob}]`,
               });
             },
           );
