@@ -113,6 +113,22 @@ router.put(`/${tableName}/:id`, function (req, res, next) {
         console.log(err);
         res.sendStatus(500);
       } else {
+        if (req.body.status == "approved") {
+          connection.query(
+            `SELECT * FROM jobApplication LEFT JOIN user ON user.idUser = jobApplication.userId LEFT JOIN job ON job.idJob = jobApplication.jobId WHERE idJobApplication = ${req.params.id}`,
+            (notifErr, notifRes) => {
+              sendNotification(notifRes[0].jobTitle, "تم قبولك في الوظيفة", [
+                notifRes[0].fcmToken,
+              ]);
+              connection.query(`INSERT INTO notification SET ?`, {
+                userId: notifRes[0].idUser,
+                notificationTitle: notifRes[0].jobTitle,
+                notificationBody: "تم قبولك في الوظيفة",
+                notificationType: "applicationApproved",
+              });
+            },
+          );
+        }
         res.sendStatus(200);
       }
     },
