@@ -27,6 +27,18 @@ router.get(`/${tableName}s`, function (req, res, next) {
   }
 });
 
+router.post("/notifications/seen", function (req, res) {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    connection.query(
+      `UPDATE notification SET seen = 1 WHERE userId = ${decoded.idUser}`,
+    );
+  } catch (error) {
+    res.sendStatus(404);
+  }
+});
+
 router.post("/notifications/send", function (req, res) {
   res.send(sendNotification(req.body.title, req.body.body, req.body.users));
 });
