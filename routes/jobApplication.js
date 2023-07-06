@@ -5,6 +5,7 @@ var router = express.Router();
 var path = require("path");
 const auth = require("../middleware/auth.middlewares");
 const jwt = require("jsonwebtoken");
+const { sendNotification } = require("../helpers/fcm");
 
 const tableName = path.basename(__filename).split(".")[0];
 
@@ -79,6 +80,22 @@ router.post(`/add${capitalize(tableName)}`, function (req, res, next) {
         console.log(err);
         res.sendStatus(500);
       } else {
+        connection.query(
+          `SELECT * FROM job LEFT JOIN user ON user.idUser = job.createdBy WHERE idJob = ${req.body.jobId}`,
+          (notifErr, notifRes) => {
+            sendNotification(
+              notifRes[0].jobTitle,
+              "لديك متقدمين على الوظيفة في الانتظار",
+              [notifRes[0].fcmToken],
+            );
+            connection.query(`INSERT INTO notification SET ?`, {
+              userId: notifRes[0].idUser,
+              notificationTitle: notifRes[0].jobTitle,
+              notificationBody: "لديك متقدمين على الوظيفة في الانتظار",
+              notificationType: "newApplication",
+            });
+          },
+        );
         res.sendStatus(200);
       }
     },
