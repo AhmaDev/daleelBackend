@@ -5,6 +5,7 @@ var router = express.Router();
 var path = require("path");
 const { sendNotification } = require("../helpers/fcm");
 const jwt = require("jsonwebtoken");
+const { response } = require("../app");
 const tableName = path.basename(__filename).split(".")[0];
 
 router.get(`/${tableName}s`, function (req, res, next) {
@@ -33,6 +34,9 @@ router.post("/notifications/seen", function (req, res) {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     connection.query(
       `UPDATE notification SET seen = 1 WHERE userId = ${decoded.idUser}`,
+      (err, response) => {
+        res.sendStatus(200);
+      },
     );
   } catch (error) {
     res.sendStatus(404);
