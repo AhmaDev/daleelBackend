@@ -11,10 +11,9 @@ router.get(`/${tableName}s`, function (req, res, next) {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(decoded);
     connection.query(
       `SELECT * FROM ${tableName} WHERE userId = ${
-        decoded.userId
+        decoded.idUser
       } ORDER BY id${capitalize(tableName)} DESC`,
       (err, result) => {
         if (err) {
