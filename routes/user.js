@@ -149,6 +149,24 @@ router.put(`/updatePassword`, function (req, res, next) {
     },
   );
 });
+router.put(
+  `/updatePasswordAdmin/:userId`,
+  auth.roles("Admin"),
+  function (req, res, next) {
+    connection.query(
+      `UPDATE user SET password = ? WHERE idUser = ${req.params.userId}`,
+      [bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))],
+      (err, result) => {
+        if (err) {
+          console.log("Error while editing a user", err);
+          res.sendStatus(500);
+          return;
+        }
+        res.sendStatus(200);
+      },
+    );
+  },
+);
 
 router.put(
   `/updateUserProfilePicture`,
