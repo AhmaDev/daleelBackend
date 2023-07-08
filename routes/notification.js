@@ -63,7 +63,7 @@ router.get(`/${tableName}/:id`, function (req, res, next) {
 
 router.post(`/add${capitalize(tableName)}`, function (req, res, next) {
   connection.query(
-    `INSERT INTO ${tableName} SET ?`,
+    `INSERT INTO ${tableName} (userId,notificationTitle,notificationBody,notificationType) VALUES ?`,
     req.body,
     (err, result) => {
       if (err) {
