@@ -25,7 +25,7 @@ router.get(`/sliderAds`, function (req, res, next) {
 });
 router.get(`/searchAds`, function (req, res, next) {
   connection.query(
-    `SELECT job.*, province.provinceName ,(SELECT username FROM user WHERE user.idUser = job.createdBy) As username FROM ${tableName} LEFT JOIN job ON jobAd.jobId = job.idJob LEFT JOIN province ON job.provinceId = province.idProvince WHERE jobAd.status = 'active' AND jobAd.adTypeId = 3 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
+    `SELECT job.*, province.provinceName ,(SELECT username FROM user WHERE user.idUser = job.createdBy) As username FROM ${tableName} JOIN job ON jobAd.jobId = job.idJob LEFT JOIN province ON job.provinceId = province.idProvince WHERE jobAd.status = 'active' AND jobAd.adTypeId = 3 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
     (err, result) => {
       if (err) {
         console.log(err);
@@ -36,7 +36,7 @@ router.get(`/searchAds`, function (req, res, next) {
 });
 router.get(`/popupAds`, function (req, res, next) {
   connection.query(
-    `SELECT job.*, province.provinceName ,(SELECT username FROM user WHERE user.idUser = job.createdBy) As username FROM ${tableName} LEFT JOIN job ON jobAd.jobId = job.idJob LEFT JOIN province ON job.provinceId = province.idProvince WHERE jobAd.status = 'active' AND jobAd.adTypeId = 2 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
+    `SELECT job.*, province.provinceName ,(SELECT username FROM user WHERE user.idUser = job.createdBy) As username FROM ${tableName} JOIN job ON jobAd.jobId = job.idJob LEFT JOIN province ON job.provinceId = province.idProvince WHERE jobAd.status = 'active' AND jobAd.adTypeId = 2 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
     (err, result) => {
       if (err) {
         console.log(err);
@@ -48,7 +48,7 @@ router.get(`/popupAds`, function (req, res, next) {
 
 router.get(`/jobAds/:id`, function (req, res, next) {
   connection.query(
-    `SELECT * FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType WHERE jobAd.jobId = ${req.params.id}`,
+    `SELECT * FROM jobAd JOIN adType ON jobAd.adTypeId = adType.idAdType WHERE jobAd.jobId = ${req.params.id}`,
     (err, result) => {
       res.send(result);
     },
@@ -56,7 +56,7 @@ router.get(`/jobAds/:id`, function (req, res, next) {
 });
 router.get(`/allJobAds`, function (req, res, next) {
   connection.query(
-    `SELECT jobAd.*, adType.* , job.jobTitle FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType LEFT JOIN job ON jobAd.jobId = job.idJob ORDER BY idJobAd DESC`,
+    `SELECT jobAd.*, adType.* , job.jobTitle FROM jobAd LEFT JOIN adType ON jobAd.adTypeId = adType.idAdType JOIN job ON jobAd.jobId = job.idJob ORDER BY idJobAd DESC`,
     (err, result) => {
       res.send(result);
     },
