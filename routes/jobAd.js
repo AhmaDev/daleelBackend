@@ -14,7 +14,7 @@ router.get(`/${tableName}s`, function (req, res, next) {
 
 router.get(`/sliderAds`, function (req, res, next) {
   connection.query(
-    `SELECT job.* FROM ${tableName} LEFT JOIN job ON jobAd.jobId = job.idJob WHERE jobAd.status = 'active' AND jobAd.adTypeId = 1 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
+    `SELECT job.* FROM ${tableName} JOIN job ON jobAd.jobId = job.idJob WHERE jobAd.status = 'active' AND jobAd.adTypeId = 1 AND DATE(NOW()) BETWEEN jobAd.startDate AND jobAd.endDate`,
     (err, result) => {
       if (err) {
         console.log(err);
