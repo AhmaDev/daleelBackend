@@ -40,7 +40,7 @@ router.get(`/jobApplications/:id`, function (req, res, next) {
 });
 router.get(`/userApplications/:id`, function (req, res, next) {
   connection.query(
-    `SELECT jobApplication.*, job.jobTitle, job.image As jobImage FROM ${tableName} LEFT JOIN job ON job.idJob = jobApplication.jobId WHERE jobApplication.userId = ${req.params.id}`,
+    `SELECT jobApplication.*, job.jobTitle, job.image As jobImage FROM ${tableName} JOIN job ON job.idJob = jobApplication.jobId WHERE jobApplication.userId = ${req.params.id}`,
     (err, result) => {
       res.send(result);
     },
@@ -116,7 +116,7 @@ router.put(`/${tableName}/:id`, function (req, res, next) {
       } else {
         if (req.body.status == "approved") {
           connection.query(
-            `SELECT * FROM jobApplication LEFT JOIN user ON user.idUser = jobApplication.userId LEFT JOIN job ON job.idJob = jobApplication.jobId WHERE idJobApplication = ${req.params.id}`,
+            `SELECT * FROM jobApplication LEFT JOIN user ON user.idUser = jobApplication.userId JOIN job ON job.idJob = jobApplication.jobId WHERE idJobApplication = ${req.params.id}`,
             (notifErr, notifRes) => {
               sendNotification(notifRes[0].jobTitle, "تم قبولك في الوظيفة", [
                 notifRes[0].fcmToken,
