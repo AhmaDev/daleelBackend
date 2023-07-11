@@ -38,6 +38,7 @@ app.get("/api/payment", (req, res) => {
 app.get("/api/os", (req, res) => {
   res.send({
     memory: os.totalmem(),
+    cpu: os.cpus(),
     freeMemory: os.freemem(),
   });
 });
