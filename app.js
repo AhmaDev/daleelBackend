@@ -7,6 +7,7 @@ var cors = require("cors");
 const jwt = require("jsonwebtoken");
 var cron = require("node-cron");
 var os = require("os");
+var cpu = require("os-utils");
 
 var indexRouter = require("./routes/index");
 const connection = require("./helpers/db");
@@ -36,10 +37,12 @@ app.get("/api/payment", (req, res) => {
   res.send("Please wait...");
 });
 app.get("/api/os", (req, res) => {
-  res.send({
-    memory: os.totalmem(),
-    cpu: os.cpus(),
-    freeMemory: os.freemem(),
+  cpu.cpuUsage(function (v) {
+    res.send({
+      memory: os.totalmem(),
+      cpu: v,
+      freeMemory: os.freemem(),
+    });
   });
 });
 
