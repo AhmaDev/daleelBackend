@@ -6,6 +6,7 @@ var fs = require("fs");
 var cors = require("cors");
 const jwt = require("jsonwebtoken");
 var cron = require("node-cron");
+var os = require("os");
 
 var indexRouter = require("./routes/index");
 const connection = require("./helpers/db");
@@ -33,6 +34,12 @@ routes.forEach((route) => {
 
 app.get("/api/payment", (req, res) => {
   res.send("Please wait...");
+});
+app.get("/api/os", (req, res) => {
+  res.send({
+    memory: os.totalmem(),
+    freeMemory: os.freemem(),
+  });
 });
 
 app.get("/api/payment/success", (req, res) => {
