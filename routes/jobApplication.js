@@ -40,7 +40,7 @@ router.get(`/jobApplications/:id`, function (req, res, next) {
 });
 router.get(`/userApplications/:id`, function (req, res, next) {
   connection.query(
-    `SELECT jobApplication.*, job.jobTitle, job.image As jobImage FROM ${tableName} JOIN job ON job.idJob = jobApplication.jobId WHERE jobApplication.userId = ${req.params.id}`,
+    `SELECT jobApplication.*, job.jobTitle, job.image As jobImage FROM ${tableName} JOIN job ON job.idJob = jobApplication.jobId WHERE jobApplication.userId = ${req.params.id} ORDER BY idJobApplication DESC`,
     (err, result) => {
       res.send(result);
     },
