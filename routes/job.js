@@ -71,7 +71,7 @@ router.get("/myJobs", (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   connection.query(
-    `SELECT *, (SELECT username FROM user WHERE user.idUser = job.createdBy) As username, (SELECT COUNT(idJobApplication) FROM jobApplication WHERE jobId = job.idJob) As totalApplied FROM ${tableName} LEFT JOIN province ON job.provinceId = province.idProvince WHERE job.createdBy = ${decoded.idUser}`,
+    `SELECT *, (SELECT username FROM user WHERE user.idUser = job.createdBy) As username, (SELECT COUNT(idJobApplication) FROM jobApplication WHERE jobId = job.idJob) As totalApplied FROM ${tableName} LEFT JOIN province ON job.provinceId = province.idProvince WHERE job.createdBy = ${decoded.idUser} ORDER BY idJob DESC`,
     (err, result) => {
       res.send(result);
     },
