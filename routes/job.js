@@ -17,8 +17,6 @@ if (process.env.PRODUCTION === "true") {
   initUrl = "https://api.zaincash.iq/transaction/init";
   requestUrl = "https://api.zaincash.iq/transaction/pay?id=";
 }
-var serviceType = "";
-var redirectUrl = "https://nooor.app/privacy";
 
 router.get(`/${tableName}s`, function (req, res, next) {
   let query = "";
@@ -218,54 +216,41 @@ router.delete(`/${tableName}/:id`, function (req, res, next) {
   );
 });
 
-router.get("/ad/zaincash/request/:adTypeKey", function (req, res) {
-  connection.query(
-    `SELECT * FROM adType WHERE adKey = '${req.params.adTypeKey}'`,
-    (err, result) => {
-      if (err || result.length == 0) {
-        res.sendStatus(500);
-        return;
-      }
-      const amount = result[0].adPrice;
-      const time = Date.now();
+router.post("/ad/zaincash/request", function (req, res) {
+  const time = Date.now();
+  const data = {
+    amount: req.body.price,
+    serviceType: req.body.serviceName,
+    msisdn: process.env.MSISDN,
+    orderId: "ORDER_1",
+    redirectUrl: "https://api.al-daleel.app/payment",
+    iat: time,
+    exp: time + 60 * 60 * 4,
+  };
+  const token = jwt.sign(data, process.env.SECRET);
+  const postData = {
+    token: token,
+    merchantId: process.env.MERCHANTID,
+    lang: "ar",
+  };
+  var stringfiedData = JSON.stringify(postData);
 
-      serviceType = result[0].adTypeTitle;
-
-      const data = {
-        amount: amount,
-        serviceType: serviceType,
-        msisdn: process.env.MSISDN,
-        orderId: "ORDER_1",
-        redirectUrl: redirectUrl,
-        iat: time,
-        exp: time + 60 * 60 * 4,
-      };
-      const token = jwt.sign(data, process.env.SECRET);
-      const postData = {
-        token: token,
-        merchantId: process.env.MERCHANTID,
-        lang: "ar",
-      };
-      var stringfiedData = JSON.stringify(postData);
-
-      var config = {
-        method: "post",
-        url: "https://test.zaincash.iq/transaction/init",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: stringfiedData,
-      };
-
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+  var config = {
+    method: "post",
+    url: "https://api.zaincash.iq/transaction/init",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    data: stringfiedData,
+  };
+
+  axios(config)
+    .then(function (response) {
+      res.send(response.data);
+    })
+    .catch(function (error) {
+      res.status(500).send(error);
+    });
 });
 
 module.exports = router;
